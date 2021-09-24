@@ -11,7 +11,6 @@ const observable = new Observable<Message>((subscriber) => {
     subscriber.next({ message, priority });
     setTimeout(generate, nextInMS);
   };
-  console.log("GENERATE!!!");
   generate();
 });
 

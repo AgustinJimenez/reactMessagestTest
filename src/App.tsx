@@ -32,20 +32,20 @@ const App: FC<{}> = () => {
   const infoMessages = messages?.filter?.(
     ({ priority }) => priority === messagesPrioritiesTypes.INFO
   );
-  console.log("RENDER ===> ", messages);
   return (
     <div>
-      <h2>nuffsaid.com Coding Challenge</h2>
+      <h2 data-testid="page-title">nuffsaid.com Coding Challenge</h2>
       <hr />
       <Grid container item justifyContent="center">
         <Grid container item md={4} xs={12} justifyContent="center">
-          <Button variant="contained" color="success">
+          <Button variant="contained" color="success" data-testid="stop-button">
             STOP
           </Button>
           <Button
             variant="contained"
             color="success"
             onClick={removeAllMessages}
+            data-testid="clear-button"
           >
             CLEAR
           </Button>

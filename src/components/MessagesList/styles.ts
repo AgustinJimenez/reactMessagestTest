@@ -1,14 +1,9 @@
 import { styled } from "@mui/system";
-import { createStyles, makeStyles } from "@mui/styles";
-import { Theme } from "@mui/material";
+import { Grid } from "@mui/material";
 
-export const messagesListStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    countContainer: {
-      marginBottom: theme.spacing(1),
-    },
-  })
-);
+export const CountLabelContainerGrid = styled(Grid)(({ theme, type }: any) => ({
+  marginBottom: theme.spacing(1),
+}));
 
 export const MessageListItem = styled("div")(({ theme, type }: any) => ({
   color: theme.palette.primary.contrastText,

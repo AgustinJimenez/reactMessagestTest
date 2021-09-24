@@ -17,11 +17,6 @@ const MessagesProvider = ({ children }: any) => {
   const removeMessageById = useCallback(
     (selectedId: string) => {
       let updatedMessages = messages.filter(({ id }) => id !== selectedId);
-      console.log("removeMessageById ===> ", {
-        selectedId,
-        messages,
-        updatedMessages,
-      });
       setMessages([...updatedMessages]);
     },
     [messages, setMessages]

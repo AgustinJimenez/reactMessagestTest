@@ -4,7 +4,7 @@ import { useCallback, useContext } from "react";
 import { MessagesContext } from "../../contexts/MessagesContext";
 import List from "@mui/material/List";
 import { Message, MessagesListProps } from "../../types";
-import { MessageListItem, messagesListStyles } from "./styles";
+import { CountLabelContainerGrid, MessageListItem } from "./styles";
 import { Text } from "../Text";
 import { Title } from "../Title";
 
@@ -29,16 +29,17 @@ const MessagesListItem = ({ message, id }: Message) => {
 };
 
 const MessagesList = ({ title, count, messages, type }: MessagesListProps) => {
-  const classes = messagesListStyles();
   return (
-    <List>
+    <List data-testid="messages-list">
       <Grid container>
         <Grid item xs={12}>
-          <Title>{title}</Title>
+          <Title data-testid="messages-list-title">{title}</Title>
         </Grid>
-        <Grid item xs={12} className={classes.countContainer}>
-          Count {count}
-        </Grid>
+        <CountLabelContainerGrid item xs={12}>
+          <span data-testid="messages-list-count">
+            Count <span>{count}</span>
+          </span>
+        </CountLabelContainerGrid>
         <Grid container item xs={12}>
           {messages?.map?.(
             ({ message, priority, id }: Message, key: number) => (
