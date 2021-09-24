@@ -30,10 +30,24 @@ test("renders learn react link", () => {
       "messages-list-count"
     );
 
+    const messagesListButton = within(messagesList).getByTestId(
+      "messages-list-clear-button"
+    );
+
+    const messagesListMessage = within(messagesList).getByTestId(
+      "messages-list-message"
+    );
+
     expect(messagesListTitle).toBeInTheDocument();
     expect(messagesListTitle).toBeVisible();
 
     expect(messagesListCount).toBeInTheDocument();
     expect(messagesListCount).toBeVisible();
+
+    expect(messagesListButton).toBeInTheDocument();
+    expect(messagesListButton).toBeVisible();
+
+    expect(messagesListMessage).toBeInTheDocument();
+    expect(messagesListMessage).toBeVisible();
   }
 });

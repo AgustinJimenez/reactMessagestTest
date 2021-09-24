@@ -17,10 +17,15 @@ const MessagesListItem = ({ message, id }: Message) => {
   return (
     <Grid container justifyContent="space-between">
       <Grid item xs={12}>
-        <Text>{message}</Text>
+        <Text data-testid="messages-list-message">{message}</Text>
       </Grid>
       <Grid container item xs={12} justifyContent="flex-end">
-        <Button onClick={removeMessage} variant="text" color="inherit">
+        <Button
+          onClick={removeMessage}
+          variant="text"
+          color="inherit"
+          data-testid="messages-list-clear-button"
+        >
           <Text>Clear</Text>
         </Button>
       </Grid>

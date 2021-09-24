@@ -37,18 +37,28 @@ const App: FC<{}> = () => {
       <h2 data-testid="page-title">nuffsaid.com Coding Challenge</h2>
       <hr />
       <Grid container item justifyContent="center">
-        <Grid container item md={4} xs={12} justifyContent="center">
-          <Button variant="contained" color="success" data-testid="stop-button">
-            STOP
-          </Button>
-          <Button
-            variant="contained"
-            color="success"
-            onClick={removeAllMessages}
-            data-testid="clear-button"
-          >
-            CLEAR
-          </Button>
+        <Grid container item md={4} xs={12} justifyContent="center" spacing={1}>
+          <Grid item xs={12} md={2} justifyContent="center">
+            <Button
+              variant="contained"
+              color="success"
+              fullWidth
+              data-testid="stop-button"
+            >
+              STOP
+            </Button>
+          </Grid>
+          <Grid item xs={12} md={2} justifyContent="center">
+            <Button
+              variant="contained"
+              color="success"
+              onClick={removeAllMessages}
+              fullWidth
+              data-testid="clear-button"
+            >
+              CLEAR
+            </Button>
+          </Grid>
         </Grid>
 
         <Grid container spacing={2} justifyContent="center">
