@@ -13,7 +13,7 @@ ReactDOM.render(
     <React.StrictMode>
       <MessagesProvider>
         <App />
-        <ToastContainer />
+        <ToastContainer limit={1} />
       </MessagesProvider>
     </React.StrictMode>
   </ThemeProvider>,
