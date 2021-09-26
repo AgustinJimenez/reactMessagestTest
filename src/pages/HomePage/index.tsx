@@ -3,12 +3,17 @@ import { useContext, FC } from "react";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import { useEffect } from "react";
-import generateMessage from "./Api";
-import MessagesList from "./components/MessagesList";
-import { Message, messagesPrioritiesTypes, messagesTypes } from "./types";
-import { MessagesContext } from "./contexts/MessagesContext";
+import generateMessage from "../../Api";
+import MessagesList from "../../components/MessagesList";
+import { Message, messagesPrioritiesTypes, messagesTypes } from "../../types";
+import { MessagesContext } from "../../contexts/MessagesContext";
 import { toast } from "react-toastify";
-import { snackBarErrorDefaultOptions } from "./constants";
+import { snackBarErrorDefaultOptions } from "../../constants";
+import {
+  ButtonTextBold,
+  HomePageTitle,
+  MessagesListsContainerGrid,
+} from "./styles";
 
 const App: FC<{}> = () => {
   const { messages, addNewMessage, removeAllMessages } =
@@ -17,24 +22,29 @@ const App: FC<{}> = () => {
   useEffect(() => {
     const cleanUp = generateMessage((newMessage: Message) => {
       addNewMessage(newMessage);
-      if (newMessage.priority === messagesPrioritiesTypes.ERROR)
+      if (newMessage.priority === messagesPrioritiesTypes.ERROR) {
         toast(newMessage.message, snackBarErrorDefaultOptions);
+      }
     });
     return cleanUp;
   }, [generateMessage]);
 
-  const errorMessages = messages?.filter?.(
-    ({ priority }) => priority === messagesPrioritiesTypes.ERROR
-  );
-  const warningMessages = messages?.filter?.(
-    ({ priority }) => priority === messagesPrioritiesTypes.WARNING
-  );
-  const infoMessages = messages?.filter?.(
-    ({ priority }) => priority === messagesPrioritiesTypes.INFO
-  );
+  const errorMessages = messages
+    ?.filter?.(({ priority }) => priority === messagesPrioritiesTypes.ERROR)
+    .reverse?.();
+  const warningMessages = messages
+    ?.filter?.(({ priority }) => priority === messagesPrioritiesTypes.WARNING)
+    .reverse?.();
+  const infoMessages = messages
+    ?.filter?.(({ priority }) => priority === messagesPrioritiesTypes.INFO)
+    .reverse?.();
   return (
     <div>
-      <h2 data-testid="page-title">nuffsaid.com Coding Challenge</h2>
+      <Grid container item>
+        <HomePageTitle data-testid="page-title" container item xs={12}>
+          nuffsaid.com Coding Challenge
+        </HomePageTitle>
+      </Grid>
       <hr />
       <Grid container item justifyContent="center">
         <Grid container item md={4} xs={12} justifyContent="center" spacing={1}>
@@ -45,7 +55,7 @@ const App: FC<{}> = () => {
               fullWidth
               data-testid="stop-button"
             >
-              STOP
+              <ButtonTextBold>STOP</ButtonTextBold>
             </Button>
           </Grid>
           <Grid item xs={12} md={2} justifyContent="center">
@@ -56,12 +66,16 @@ const App: FC<{}> = () => {
               fullWidth
               data-testid="clear-button"
             >
-              CLEAR
+              <ButtonTextBold>CLEAR</ButtonTextBold>
             </Button>
           </Grid>
         </Grid>
 
-        <Grid container spacing={2} justifyContent="center">
+        <MessagesListsContainerGrid
+          container
+          spacing={2}
+          justifyContent="center"
+        >
           <Grid item xs={12} md={3}>
             <MessagesList
               messages={errorMessages}
@@ -86,7 +100,7 @@ const App: FC<{}> = () => {
               type={messagesTypes.info}
             />
           </Grid>
-        </Grid>
+        </MessagesListsContainerGrid>
       </Grid>
     </div>
   );

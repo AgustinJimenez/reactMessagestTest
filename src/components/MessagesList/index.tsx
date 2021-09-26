@@ -2,13 +2,27 @@ import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import { useCallback, useContext } from "react";
 import { MessagesContext } from "../../contexts/MessagesContext";
-import List from "@mui/material/List";
 import { Message, MessagesListProps } from "../../types";
-import { CountLabelContainerGrid, MessageListItem } from "./styles";
-import { Text } from "../Text";
+import {
+  ClearButtonContainerGrid,
+  ClearMessageListItemText,
+  CountLabelContainer,
+  ListContainer,
+  MessagesListItemContainer,
+  MessageText,
+  MessageTextContainer,
+} from "./styles";
 import { Title } from "../Title";
+import { textTruncate } from "../../utils";
+import TextTruncate from "../TextTruncate";
 
-const MessagesListItem = ({ message, id }: Message) => {
+const MessagesListItem = ({
+  message,
+  id,
+}: {
+  message: string;
+  id?: string;
+}) => {
   const { removeMessageById } = useContext(MessagesContext);
 
   const removeMessage = useCallback(() => {
@@ -16,51 +30,47 @@ const MessagesListItem = ({ message, id }: Message) => {
   }, [id, removeMessageById]);
   return (
     <Grid container justifyContent="space-between">
-      <Grid item xs={12}>
-        <Text data-testid="messages-list-message">{message}</Text>
-      </Grid>
-      <Grid container item xs={12} justifyContent="flex-end">
+      <MessageTextContainer item xs={12}>
+        <MessageText data-testid="messages-list-message">
+          <TextTruncate charNum={106}>{message}</TextTruncate>
+        </MessageText>
+      </MessageTextContainer>
+      <ClearButtonContainerGrid
+        container
+        item
+        xs={12}
+        justifyContent="flex-end"
+      >
         <Button
           onClick={removeMessage}
           variant="text"
           color="inherit"
           data-testid="messages-list-clear-button"
         >
-          <Text>Clear</Text>
+          <ClearMessageListItemText>Clear</ClearMessageListItemText>
         </Button>
-      </Grid>
+      </ClearButtonContainerGrid>
     </Grid>
   );
 };
 
 const MessagesList = ({ title, count, messages, type }: MessagesListProps) => {
   return (
-    <List data-testid="messages-list">
-      <Grid container>
-        <Grid item xs={12}>
-          <Title data-testid="messages-list-title">{title}</Title>
-        </Grid>
-        <CountLabelContainerGrid item xs={12}>
-          <span data-testid="messages-list-count">
-            Count <span>{count}</span>
-          </span>
-        </CountLabelContainerGrid>
-        <Grid container item xs={12}>
-          {messages?.map?.(
-            ({ message, priority, id }: Message, key: number) => (
-              <MessageListItem key={key} type={type}>
-                <MessagesListItem
-                  message={message}
-                  priority={priority}
-                  id={id}
-                  key={key}
-                />
-              </MessageListItem>
-            )
-          )}
-        </Grid>
+    <Grid container data-testid="messages-list">
+      <Grid item xs={12}>
+        <Title data-testid="messages-list-title">{title}</Title>
       </Grid>
-    </List>
+      <CountLabelContainer item xs={12}>
+        <span data-testid="messages-list-count">Count {count}</span>
+      </CountLabelContainer>
+      <ListContainer>
+        {messages?.map?.(({ message, id }: Message, key: number) => (
+          <MessagesListItemContainer key={key} type={type}>
+            <MessagesListItem message={message} id={id} />
+          </MessagesListItemContainer>
+        ))}
+      </ListContainer>
+    </Grid>
   );
 };
 export default MessagesList;

@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./App";
+import HomePage from "./pages/HomePage";
 import { MessagesProvider } from "./contexts/MessagesContext";
 import reportWebVitals from "./reportWebVitals";
 import { ToastContainer } from "react-toastify";
@@ -12,7 +12,7 @@ ReactDOM.render(
   <ThemeProvider theme={theme}>
     <React.StrictMode>
       <MessagesProvider>
-        <App />
+        <HomePage />
         <ToastContainer limit={1} />
       </MessagesProvider>
     </React.StrictMode>

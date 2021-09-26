@@ -19,6 +19,6 @@ export interface Message {
 export interface MessagesListProps {
   title: string;
   count: number;
-  messages: Message[] & { key?: number };
+  messages: Message[];
   type: messagesTypes;
 }
