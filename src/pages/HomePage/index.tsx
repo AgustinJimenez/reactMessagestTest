@@ -1,63 +1,63 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useContext, FC, useCallback, useState } from "react";
+import { useContext, FC, useCallback } from "react";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import { useEffect } from "react";
-import faker from "faker";
 import MessagesList from "../../components/MessagesList";
 import { Message, messagesPrioritiesTypes, messagesTypes } from "../../types";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import { toast } from "react-toastify";
 import { snackBarErrorDefaultOptions } from "../../constants";
-import random from "lodash/random";
 import {
   ButtonTextBold,
   HomePageTitle,
   MessagesListsContainerGrid,
 } from "./styles";
+import generateMessage from "../../Api";
+import { v4 as uuidv4 } from "uuid";
 
 const App: FC<{}> = () => {
-  const [msgsAreRunning, setMsgsAreRunning] = useState(true);
+  const {
+    messages,
+    addNewMessage,
+    removeAllMessages,
+    messagesAreRunning,
+    toggleMessagesRunner,
+  } = useContext(GlobalContext);
+
   const toggleMsgsRun = useCallback(() => {
-    const newValue = !msgsAreRunning;
-    setMsgsAreRunning(newValue);
-    if (!newValue) toast.clearWaitingQueue();
-  }, [msgsAreRunning]);
-  const { messages, addNewMessage, removeAllMessages } =
-    useContext(GlobalContext);
+    toggleMessagesRunner();
+    if (messagesAreRunning) toast.clearWaitingQueue();
+  }, []);
 
   const addMessage = useCallback(
     (newMessage: Message) => {
-      if (!msgsAreRunning) return;
+      newMessage["id"] = uuidv4();
+      newMessage["timestamp"] = new Date();
       addNewMessage(newMessage);
       if (newMessage.priority === messagesPrioritiesTypes.ERROR) {
         toast(newMessage.message, snackBarErrorDefaultOptions);
         toast.clearWaitingQueue();
       }
     },
-    [msgsAreRunning, addNewMessage]
+    [addNewMessage]
   );
-  const generate = useCallback(() => {
-    const message = faker.lorem.sentence();
-    const priority = random(0, 2) as messagesPrioritiesTypes;
-    const nextInMS = random(500, 3000);
-    addMessage({ message, priority });
-    setTimeout(generate, nextInMS);
-  }, [addMessage, messages]);
 
   useEffect(() => {
-    generate();
+    const cleanUp = generateMessage(addMessage);
+    return cleanUp;
   }, []);
 
   const errorMessages = messages
     ?.filter?.(({ priority }) => priority === messagesPrioritiesTypes.ERROR)
-    .reverse?.();
+    .sort((a: any, b: any) => a?.timestamp - b?.timestamp);
   const warningMessages = messages
     ?.filter?.(({ priority }) => priority === messagesPrioritiesTypes.WARNING)
-    .reverse?.();
+    .sort((a: any, b: any) => a?.timestamp - b?.timestamp);
   const infoMessages = messages
     ?.filter?.(({ priority }) => priority === messagesPrioritiesTypes.INFO)
-    .reverse?.();
+    .sort((a: any, b: any) => a?.timestamp - b?.timestamp);
+
   return (
     <div>
       <Grid container item>
@@ -77,7 +77,7 @@ const App: FC<{}> = () => {
               onClick={toggleMsgsRun}
             >
               <ButtonTextBold>
-                {msgsAreRunning ? "STOP" : "START"}
+                {messagesAreRunning ? "STOP" : "START"}
               </ButtonTextBold>
             </Button>
           </Grid>

@@ -14,6 +14,7 @@ export interface Message {
   id?: string;
   message: string;
   priority: messagesPrioritiesTypes;
+  timestamp?: Date;
 }
 
 export interface MessagesListProps {
@@ -22,7 +23,5 @@ export interface MessagesListProps {
   messages: Message[];
   type: messagesTypes;
 }
-
-export const ADD_MESSAGE_ACTION = "ADD_MESSAGE_ACTION";
-export const REMOVE_MESSAGE_BY_ID_ACTION = "REMOVE_MESSAGE_BY_ID_ACTION";
-export const REMOVE_ALL_MESSAGES_ACTION = "REMOVE_ALL_MESSAGES_ACTION";
+export const SET_ITEM_TO_DATASET_REDUCER = "SET_ITEM_TO_DATASET_REDUCER";
+export const ADD_MESSAGE_SAGA = "ADD_MESSAGE_SAGA";

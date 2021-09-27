@@ -1,21 +1,41 @@
-import {
-  ADD_MESSAGE_ACTION,
-  Message,
-  REMOVE_ALL_MESSAGES_ACTION,
-  REMOVE_MESSAGE_BY_ID_ACTION,
-} from "../types";
+import { SET_ITEM_TO_DATASET_REDUCER } from "../types";
+import { ListToObjectList } from "../utils";
 
-export const addMessageReducerAction = (message: Message) => ({
-  type: ADD_MESSAGE_ACTION,
-  payload: { message },
+export const setDatasetToReducer = (
+  data: any,
+  dataset_name: string,
+  options = { key: "" }
+) => ({
+  type: SET_ITEM_TO_DATASET_REDUCER,
+  dataset_name,
+  data,
+  options: { ...options, replaceList: true, multiple: false },
 });
 
-export const removeMessageReducerAction = (id: string) => ({
-  type: REMOVE_MESSAGE_BY_ID_ACTION,
-  payload: { selectedId: id },
+export const setDatasetListToReducer = (
+  dataList: object | [],
+  dataset_name: string,
+  options = {}
+) => ({
+  type: SET_ITEM_TO_DATASET_REDUCER,
+  dataset_name,
+  data: dataList,
+  options: { ...options, replaceList: false, multiple: false },
 });
 
-export const removeAllMessagesReducerAction = () => ({
-  type: REMOVE_ALL_MESSAGES_ACTION,
-  payload: {},
+export const setDatasetListToObjectReducer = (
+  data: any,
+  dataset_name: string,
+  options = {}
+) => ({
+  type: SET_ITEM_TO_DATASET_REDUCER,
+  dataset_name,
+  data: ListToObjectList(data),
+  options: { ...options, replaceList: true, multiple: false },
+});
+
+export const setMultipleDatasetsToReducer = (actions = {}) => ({
+  type: SET_ITEM_TO_DATASET_REDUCER,
+  actions,
+  options: { multiple: true },
 });

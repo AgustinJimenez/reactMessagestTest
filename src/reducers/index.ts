@@ -1,45 +1,57 @@
-import {
-  ADD_MESSAGE_ACTION,
-  Message,
-  REMOVE_ALL_MESSAGES_ACTION,
-  REMOVE_MESSAGE_BY_ID_ACTION,
-} from "../types";
-import { v4 as uuidv4 } from "uuid";
+import { SET_ITEM_TO_DATASET_REDUCER } from "../types";
+import initialState from "./initialState";
 
-const appReducer = (state: any, action: any) => {
-  switch (action.type) {
-    case ADD_MESSAGE_ACTION:
-      const { message } = action.payload;
-      message["id"] = uuidv4();
-      state.messages.push(message);
-      return {
-        ...state,
-      };
+const debug = false;
 
-    case REMOVE_ALL_MESSAGES_ACTION:
-      return {
-        ...state,
-        messages: [],
-      };
+const itemToDataset = (state: any, action: any) => {
+  let { data, dataset_name, options = { key: "" } } = action;
 
-    case REMOVE_MESSAGE_BY_ID_ACTION:
-      const { selectedId } = action.payload;
-      const newMessages = state.messages.filter(
-        ({ id }: Message) => id !== selectedId
-      );
-      console.log("REMOVE MESSAGES ===> ", {
-        messages: state.messages,
-        selectedId,
-        newMessages,
-      });
-      return {
-        ...state,
-        messages: newMessages,
-      };
+  if (!dataset_name) state = { ...state, ...data };
+  else if (!!options["key"]) state[dataset_name][options.key] = data;
+  else state[dataset_name] = data;
 
-    default:
-      return state;
-  }
+  state = { ...state };
+  return state;
 };
 
-export default appReducer;
+const itemToDatasetList = (state: any, action: any) => {
+  let { data, dataset_name } = action;
+
+  if (!Array.isArray(data)) data = [data];
+
+  for (let item of data)
+    if (!!item.id && !!state[dataset_name]) state[dataset_name][item.id] = item;
+  state = { ...state };
+  return state;
+};
+
+const multipleItemsToDataset = (state: any, action: any) => {
+  for (let act of action["actions"]) state = datasetHandler(state, act);
+
+  return state;
+};
+
+const datasetHandler = (state: any, action: any) => {
+  //console.log('datasetHandler ===> ', action)
+  let { multiple, replaceList } = action["options"];
+
+  if (multiple) state = multipleItemsToDataset(state, action);
+  else if (replaceList) state = itemToDataset(state, action);
+  else state = itemToDatasetList(state, action);
+
+  return state;
+};
+
+const datasetReducer = (state = initialState, action: any) => {
+  if (debug) console.log("REDUCERS - datasetReducer ===> ", { action });
+  //throw 'REDUCER FETCH NAME IS REQUIRED'
+  switch (action.type) {
+    case SET_ITEM_TO_DATASET_REDUCER:
+      state = datasetHandler(state, action);
+      break;
+  }
+  return state;
+};
+
+//export default Reducer(datasetReducer)
+export default datasetReducer;
