@@ -23,5 +23,3 @@ export interface MessagesListProps {
   messages: Message[];
   type: messagesTypes;
 }
-export const SET_ITEM_TO_DATASET_REDUCER = "SET_ITEM_TO_DATASET_REDUCER";
-export const ADD_MESSAGE_SAGA = "ADD_MESSAGE_SAGA";

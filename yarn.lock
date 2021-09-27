@@ -9584,6 +9584,11 @@ react-is@^17.0.1, react-is@^17.0.2:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
 
+react-persist-context@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/react-persist-context/-/react-persist-context-1.0.7.tgz#605baf90336ce023c8dfa9682978948d1749e4a8"
+  integrity sha512-39m+siCcOEIEDSug8J5g4dHvy6u6cuTc/0fTPWWkcOhVZy3aN8SRMo/VYKggjCEUCDmQUBGwj+ZtDF9EwM/o1A==
+
 react-refresh@^0.8.3:
   version "0.8.3"
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.8.3.tgz#721d4657672d400c5e3c75d063c4a85fb2d5d68f"

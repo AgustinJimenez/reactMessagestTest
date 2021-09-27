@@ -1,4 +1,9 @@
-import { SET_ITEM_TO_DATASET_REDUCER } from "../types";
+import {
+  ADD_MESSAGE_REDUCER,
+  SET_ITEM_TO_DATASET_REDUCER,
+  TOGGLE_MESSAGES_RUNNER_REDUCER,
+} from "../constants";
+import { Message } from "../types";
 import { ListToObjectList } from "../utils";
 
 export const setDatasetToReducer = (
@@ -38,4 +43,15 @@ export const setMultipleDatasetsToReducer = (actions = {}) => ({
   type: SET_ITEM_TO_DATASET_REDUCER,
   actions,
   options: { multiple: true },
+});
+//==========================================================================================
+
+export const addMessageReducerAtion = (message: Message) => ({
+  type: ADD_MESSAGE_REDUCER,
+  payload: { message },
+});
+
+export const toggleMessagesRunnerReducerAtion = () => ({
+  type: TOGGLE_MESSAGES_RUNNER_REDUCER,
+  payload: {},
 });

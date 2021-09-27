@@ -4,17 +4,14 @@ import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import { useEffect } from "react";
 import MessagesList from "../../components/MessagesList";
-import { Message, messagesPrioritiesTypes, messagesTypes } from "../../types";
+import { messagesPrioritiesTypes, messagesTypes } from "../../types";
 import { GlobalContext } from "../../contexts/GlobalContext";
-import { toast } from "react-toastify";
-import { snackBarErrorDefaultOptions } from "../../constants";
 import {
   ButtonTextBold,
   HomePageTitle,
   MessagesListsContainerGrid,
 } from "./styles";
 import generateMessage from "../../Api";
-import { v4 as uuidv4 } from "uuid";
 
 const App: FC<{}> = () => {
   const {
@@ -25,24 +22,8 @@ const App: FC<{}> = () => {
     toggleMessagesRunner,
   } = useContext(GlobalContext);
 
-  const toggleMsgsRun = useCallback(() => {
-    toggleMessagesRunner();
-    if (messagesAreRunning) toast.clearWaitingQueue();
-  }, []);
-
-  const addMessage = useCallback(
-    (newMessage: Message) => {
-      newMessage["id"] = uuidv4();
-      newMessage["timestamp"] = new Date();
-      addNewMessage(newMessage);
-      if (newMessage.priority === messagesPrioritiesTypes.ERROR) {
-        toast(newMessage.message, snackBarErrorDefaultOptions);
-        toast.clearWaitingQueue();
-      }
-    },
-    [addNewMessage]
-  );
-
+  const toggleMsgsRun = useCallback(toggleMessagesRunner, []);
+  const addMessage = useCallback(addNewMessage, [addNewMessage]);
   useEffect(() => {
     const cleanUp = generateMessage(addMessage);
     return cleanUp;

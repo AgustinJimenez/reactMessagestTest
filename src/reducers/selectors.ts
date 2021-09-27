@@ -12,13 +12,6 @@ export const datasetSelector = (
   }: any = {}
 ) => {
   let selected_dataset = getDataset(state, datasetName);
-  /*  console.log("datasetSelector start ===> ", {
-    state,
-    datasetName,
-    list_format,
-    ids,
-    id,
-  }); */
   if (!!id) {
     if (!!selected_dataset[id]) selected_dataset = selected_dataset[id];
     else return null;
@@ -31,7 +24,6 @@ export const datasetSelector = (
       }
     selected_dataset = filtereds;
   }
-  //console.log('datasetSelector mid ===> ', { selected_dataset })
   if (list_format)
     selected_dataset = Object.keys(selected_dataset || []).map(
       (id) => selected_dataset[id]

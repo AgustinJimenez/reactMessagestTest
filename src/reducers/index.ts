@@ -1,5 +1,14 @@
-import { SET_ITEM_TO_DATASET_REDUCER } from "../types";
+import { messagesPrioritiesTypes } from "../types";
+import { setDatasetListToReducer } from "./actions";
+import { v4 as uuidv4 } from "uuid";
 import initialState from "./initialState";
+import {
+  ADD_MESSAGE_REDUCER,
+  SET_ITEM_TO_DATASET_REDUCER,
+  snackBarErrorDefaultOptions,
+  TOGGLE_MESSAGES_RUNNER_REDUCER,
+} from "../constants";
+import { toast } from "react-toastify";
 
 const debug = false;
 
@@ -41,17 +50,44 @@ const datasetHandler = (state: any, action: any) => {
 
   return state;
 };
-
-const datasetReducer = (state = initialState, action: any) => {
-  if (debug) console.log("REDUCERS - datasetReducer ===> ", { action });
+//==========================================================================================
+const reducers = (state = initialState, action: any) => {
+  if (debug)
+    console.log("REDUCERS - datasetReducer ===> ", {
+      action,
+      state,
+    });
   //throw 'REDUCER FETCH NAME IS REQUIRED'
   switch (action.type) {
     case SET_ITEM_TO_DATASET_REDUCER:
       state = datasetHandler(state, action);
+      break;
+
+    case ADD_MESSAGE_REDUCER:
+      if (!state.messagesAreRunning) break;
+      let newMessage = action?.payload?.message;
+      newMessage["id"] = uuidv4();
+      newMessage["timestamp"] = new Date();
+      state = datasetHandler(
+        state,
+        setDatasetListToReducer(newMessage, "messages")
+      );
+
+      if (newMessage.priority === messagesPrioritiesTypes.ERROR) {
+        toast(newMessage.message, snackBarErrorDefaultOptions);
+        toast.clearWaitingQueue();
+      }
+      state = { ...state };
+      break;
+
+    case TOGGLE_MESSAGES_RUNNER_REDUCER:
+      state.messagesAreRunning = !state.messagesAreRunning;
+      if (!state.messagesAreRunning) toast.clearWaitingQueue();
+      state = { ...state };
       break;
   }
   return state;
 };
 
 //export default Reducer(datasetReducer)
-export default datasetReducer;
+export default reducers;

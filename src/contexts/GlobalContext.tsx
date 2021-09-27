@@ -1,13 +1,12 @@
-import { createContext, useCallback, useReducer } from "react";
+import { createContext, useCallback } from "react";
 import { Message } from "../types";
-import initialState from "../reducers/initialState";
 import {
-  setDatasetListToReducer,
   setDatasetToReducer,
   setDatasetListToObjectReducer,
+  addMessageReducerAtion,
+  toggleMessagesRunnerReducerAtion,
 } from "../reducers/actions";
-import appReducer from "../reducers";
-
+import { usePersistedContext } from "react-persist-context";
 import { datasetSelector } from "../reducers/selectors";
 
 interface contextType {
@@ -21,7 +20,8 @@ interface contextType {
 const GlobalContext = createContext({} as contextType);
 
 const GlobalProvider = ({ children }: any) => {
-  const [state, dispatch] = useReducer(appReducer, initialState);
+  const { state, dispatch } = usePersistedContext();
+
   const messages: Message[] = datasetSelector(state, "messages", {
     list_format: true,
   });
@@ -36,19 +36,19 @@ const GlobalProvider = ({ children }: any) => {
   );
 
   const addNewMessage = useCallback(
-    (newMessage: Message) => {
-      dispatch(setDatasetListToReducer(newMessage, "messages"));
-    },
+    (newMessage: Message) => dispatch(addMessageReducerAtion(newMessage)),
     [dispatch]
   );
 
-  const removeAllMessages = useCallback(() => {
-    dispatch(setDatasetToReducer([], "messages"));
-  }, [dispatch]);
+  const removeAllMessages = useCallback(
+    () => dispatch(setDatasetToReducer([], "messages")),
+    [dispatch]
+  );
 
-  const toggleMessagesRunner = useCallback(() => {
-    dispatch(setDatasetToReducer(!messagesAreRunning, "messagesAreRunning"));
-  }, [messagesAreRunning, dispatch]);
+  const toggleMessagesRunner = useCallback(
+    () => dispatch(toggleMessagesRunnerReducerAtion()),
+    [dispatch]
+  );
 
   return (
     <GlobalContext.Provider
