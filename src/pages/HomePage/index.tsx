@@ -1,14 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useContext, FC } from "react";
+import { useContext, FC, useCallback, useState } from "react";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import { useEffect } from "react";
-import generateMessage from "../../Api";
+import faker from "faker";
 import MessagesList from "../../components/MessagesList";
 import { Message, messagesPrioritiesTypes, messagesTypes } from "../../types";
-import { MessagesContext } from "../../contexts/MessagesContext";
+import { GlobalContext } from "../../contexts/GlobalContext";
 import { toast } from "react-toastify";
 import { snackBarErrorDefaultOptions } from "../../constants";
+import random from "lodash/random";
 import {
   ButtonTextBold,
   HomePageTitle,
@@ -16,18 +17,37 @@ import {
 } from "./styles";
 
 const App: FC<{}> = () => {
+  const [msgsAreRunning, setMsgsAreRunning] = useState(true);
+  const toggleMsgsRun = useCallback(() => {
+    const newValue = !msgsAreRunning;
+    setMsgsAreRunning(newValue);
+    if (!newValue) toast.clearWaitingQueue();
+  }, [msgsAreRunning]);
   const { messages, addNewMessage, removeAllMessages } =
-    useContext(MessagesContext);
+    useContext(GlobalContext);
 
-  useEffect(() => {
-    const cleanUp = generateMessage((newMessage: Message) => {
+  const addMessage = useCallback(
+    (newMessage: Message) => {
+      if (!msgsAreRunning) return;
       addNewMessage(newMessage);
       if (newMessage.priority === messagesPrioritiesTypes.ERROR) {
         toast(newMessage.message, snackBarErrorDefaultOptions);
+        toast.clearWaitingQueue();
       }
-    });
-    return cleanUp;
-  }, [generateMessage]);
+    },
+    [msgsAreRunning, addNewMessage]
+  );
+  const generate = useCallback(() => {
+    const message = faker.lorem.sentence();
+    const priority = random(0, 2) as messagesPrioritiesTypes;
+    const nextInMS = random(500, 3000);
+    addMessage({ message, priority });
+    setTimeout(generate, nextInMS);
+  }, [addMessage, messages]);
+
+  useEffect(() => {
+    generate();
+  }, []);
 
   const errorMessages = messages
     ?.filter?.(({ priority }) => priority === messagesPrioritiesTypes.ERROR)
@@ -54,8 +74,11 @@ const App: FC<{}> = () => {
               color="success"
               fullWidth
               data-testid="stop-button"
+              onClick={toggleMsgsRun}
             >
-              <ButtonTextBold>STOP</ButtonTextBold>
+              <ButtonTextBold>
+                {msgsAreRunning ? "STOP" : "START"}
+              </ButtonTextBold>
             </Button>
           </Grid>
           <Grid item xs={12} md={2} justifyContent="center">
