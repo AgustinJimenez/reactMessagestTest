@@ -1,43 +1,44 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useContext, FC } from "react";
+import { useContext, FC, useCallback } from "react";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import { useEffect } from "react";
-import generateMessage from "../../Api";
 import MessagesList from "../../components/MessagesList";
-import { Message, messagesPrioritiesTypes, messagesTypes } from "../../types";
-import { MessagesContext } from "../../contexts/MessagesContext";
-import { toast } from "react-toastify";
-import { snackBarErrorDefaultOptions } from "../../constants";
+import { messagesPrioritiesTypes, messagesTypes } from "../../types";
+import { GlobalContext } from "../../contexts/GlobalContext";
 import {
   ButtonTextBold,
   HomePageTitle,
   MessagesListsContainerGrid,
 } from "./styles";
+import generateMessage from "../../Api";
 
 const App: FC<{}> = () => {
-  const { messages, addNewMessage, removeAllMessages } =
-    useContext(MessagesContext);
+  const {
+    messages,
+    addNewMessage,
+    removeAllMessages,
+    messagesAreRunning,
+    toggleMessagesRunner,
+  } = useContext(GlobalContext);
 
+  const toggleMsgsRun = useCallback(toggleMessagesRunner, []);
+  const addMessage = useCallback(addNewMessage, [addNewMessage]);
   useEffect(() => {
-    const cleanUp = generateMessage((newMessage: Message) => {
-      addNewMessage(newMessage);
-      if (newMessage.priority === messagesPrioritiesTypes.ERROR) {
-        toast(newMessage.message, snackBarErrorDefaultOptions);
-      }
-    });
+    const cleanUp = generateMessage(addMessage);
     return cleanUp;
-  }, [generateMessage]);
+  }, []);
 
   const errorMessages = messages
     ?.filter?.(({ priority }) => priority === messagesPrioritiesTypes.ERROR)
-    .reverse?.();
+    .sort((a: any, b: any) => a?.timestamp - b?.timestamp);
   const warningMessages = messages
     ?.filter?.(({ priority }) => priority === messagesPrioritiesTypes.WARNING)
-    .reverse?.();
+    .sort((a: any, b: any) => a?.timestamp - b?.timestamp);
   const infoMessages = messages
     ?.filter?.(({ priority }) => priority === messagesPrioritiesTypes.INFO)
-    .reverse?.();
+    .sort((a: any, b: any) => a?.timestamp - b?.timestamp);
+
   return (
     <div>
       <Grid container item>
@@ -54,8 +55,11 @@ const App: FC<{}> = () => {
               color="success"
               fullWidth
               data-testid="stop-button"
+              onClick={toggleMsgsRun}
             >
-              <ButtonTextBold>STOP</ButtonTextBold>
+              <ButtonTextBold>
+                {messagesAreRunning ? "STOP" : "START"}
+              </ButtonTextBold>
             </Button>
           </Grid>
           <Grid item xs={12} md={2} justifyContent="center">

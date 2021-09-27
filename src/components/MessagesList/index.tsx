@@ -1,7 +1,7 @@
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import { useCallback, useContext } from "react";
-import { MessagesContext } from "../../contexts/MessagesContext";
+import { GlobalContext } from "../../contexts/GlobalContext";
 import { Message, MessagesListProps } from "../../types";
 import {
   ClearButtonContainerGrid,
@@ -13,7 +13,6 @@ import {
   MessageTextContainer,
 } from "./styles";
 import { Title } from "../Title";
-import { textTruncate } from "../../utils";
 import TextTruncate from "../TextTruncate";
 
 const MessagesListItem = ({
@@ -23,7 +22,7 @@ const MessagesListItem = ({
   message: string;
   id?: string;
 }) => {
-  const { removeMessageById } = useContext(MessagesContext);
+  const { removeMessageById } = useContext(GlobalContext);
 
   const removeMessage = useCallback(() => {
     if (!!id) removeMessageById(id);

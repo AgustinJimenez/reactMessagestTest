@@ -14,6 +14,7 @@ export interface Message {
   id?: string;
   message: string;
   priority: messagesPrioritiesTypes;
+  timestamp?: Date;
 }
 
 export interface MessagesListProps {
