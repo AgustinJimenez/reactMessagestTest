@@ -2,6 +2,7 @@ import styled from "@mui/system/styled";
 import Grid from "@mui/material/Grid";
 import ListItem from "@mui/material/ListItem";
 import List from "@mui/material/List";
+import { useMediaQuery } from "@mui/material";
 
 export const MessageTextContainer = styled(Grid)(({ theme }: any) => ({
   height: theme.spacing(5),
@@ -34,6 +35,15 @@ export const MessagesListItemContainer = styled(ListItem)(
   })
 );
 
-export const ListContainer = styled(List)({
-  width: "100%",
+export const ListContainer = styled(List)(({ theme }) => {
+  const isXs = useMediaQuery(theme.breakpoints.only("xs"));
+
+  return {
+    paddingRight: isXs ? 10 : 0,
+    paddingLeft: isXs ? 10 : 0,
+    width: "100%",
+    maxHeight: isXs ? 1200 : 600,
+    overflow: "hidden",
+    overflowY: "visible",
+  };
 });
