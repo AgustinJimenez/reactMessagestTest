@@ -14,7 +14,7 @@ const App = () => (
       <React.StrictMode>
         <GlobalProvider>
           <Router />
-          <ToastContainer limit={1} />
+          <ToastContainer limit={1} containerId="snackbar-notification" />
         </GlobalProvider>
       </React.StrictMode>
     </ThemeProvider>

@@ -53,18 +53,29 @@ const MessagesListItem = ({
   );
 };
 
-const MessagesList = ({ title, count, messages, type }: MessagesListProps) => {
+const MessagesList = ({
+  title,
+  count = 0,
+  messages,
+  type,
+}: MessagesListProps) => {
   return (
     <Grid container data-testid="messages-list">
       <Grid item xs={12}>
         <Title data-testid="messages-list-title">{title}</Title>
       </Grid>
       <CountLabelContainer item xs={12}>
-        <span data-testid="messages-list-count">Count {count}</span>
+        <span data-testid="messages-list-count">
+          Count <span data-testid="messages-list-count-value">{count}</span>
+        </span>
       </CountLabelContainer>
       <ListContainer>
         {messages?.map?.(({ message, id }: Message, key: number) => (
-          <MessagesListItemContainer key={key} type={type}>
+          <MessagesListItemContainer
+            key={key}
+            type={type}
+            data-testid="messages-list-item"
+          >
             <MessagesListItem message={message} id={id} />
           </MessagesListItemContainer>
         ))}

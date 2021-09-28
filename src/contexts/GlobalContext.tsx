@@ -36,7 +36,9 @@ const GlobalProvider = ({ children }: any) => {
   );
 
   const addNewMessage = useCallback(
-    (newMessage: Message) => dispatch(addMessageReducerAtion(newMessage)),
+    (newMessage: Message) => {
+      dispatch(addMessageReducerAtion(newMessage));
+    },
     [dispatch]
   );
 

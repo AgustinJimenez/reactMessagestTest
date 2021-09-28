@@ -54,7 +54,7 @@ const App: FC<{}> = () => {
               variant="contained"
               color="success"
               fullWidth
-              data-testid="stop-button"
+              data-testid="start-stop-button"
               onClick={toggleMsgsRun}
             >
               <ButtonTextBold>

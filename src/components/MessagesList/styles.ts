@@ -42,7 +42,7 @@ export const ListContainer = styled(List)(({ theme }) => {
     paddingRight: isXs ? 10 : 0,
     paddingLeft: isXs ? 10 : 0,
     width: "100%",
-    maxHeight: isXs ? 1200 : 600,
+    maxHeight: isXs ? 600 : 1200,
     overflow: "hidden",
     overflowY: "visible",
   };
