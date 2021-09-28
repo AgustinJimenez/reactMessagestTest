@@ -1,5 +1,5 @@
-import { useMemo } from "react";
-import { textTruncate } from "../utils";
+import { useMemo } from 'react'
+import { textTruncate } from '../utils'
 
 interface PropsType {
   children: string;
@@ -8,10 +8,10 @@ interface PropsType {
 
 const TextTruncate = ({ children, charNum }: PropsType) => {
   const text = useMemo(() => {
-    return textTruncate(children, charNum);
-  }, [children, charNum]);
+    return textTruncate(children, charNum)
+  }, [children, charNum])
 
-  return <>{text}</>;
-};
+  return <>{text}</>
+}
 
-export default TextTruncate;
+export default TextTruncate
